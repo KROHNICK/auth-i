@@ -10,6 +10,7 @@ const Users = require("./data/models/userModel");
 
 const userRoutes = require("./routes/userRoutes");
 const registerRoutes = require("./routes/registerRoutes");
+const loginRoutes = require("./routes/loginRoutes");
 
 server.use(express.json());
 server.use(helmet());
@@ -18,6 +19,7 @@ server.use(morgan("dev"));
 
 server.use("/api/users", userRoutes);
 server.use("/api/register", registerRoutes);
+server.use("/api/login", loginRoutes);
 
 server.get("/api", (req, res) => {
   res.send("Server works.");
@@ -36,21 +38,21 @@ server.get("/api", (req, res) => {
 //     });
 // });
 
-server.post("/api/login", (req, res) => {
-  let { username, password } = req.body;
-  Users.findBy({ username })
-    .first()
-    .then(user => {
-      if (user && bcrypt.compareSync(password, user.password)) {
-        res.status(200).json({ message: `Welcome ${user.username}!` });
-      } else {
-        res.status(401).json({ message: "Invalid Credentials" });
-      }
-    })
-    .catch(error => {
-      res.status(500).json(error);
-    });
-});
+// server.post("/api/login", (req, res) => {
+//   let { username, password } = req.body;
+//   Users.findBy({ username })
+//     .first()
+//     .then(user => {
+//       if (user && bcrypt.compareSync(password, user.password)) {
+//         res.status(200).json({ message: `Welcome ${user.username}!` });
+//       } else {
+//         res.status(401).json({ message: "Invalid Credentials" });
+//       }
+//     })
+//     .catch(error => {
+//       res.status(500).json(error);
+//     });
+// });
 
 // function restricted(req, res, next) {
 //   const { username, password } = req.headers;
