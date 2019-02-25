@@ -1,15 +1,15 @@
 const express = require("express");
 const server = express();
 const helmet = require("helmet");
-const morgan = require("morgan");
 const bcrypt = require("bcryptjs");
+const cors = require("cors");
 
 const db = require("./data/db");
 const Users = require("./data/models/userModel");
 
 server.use(express.json());
 server.use(helmet());
-server.use(morgan("dev"));
+server.use(cors());
 
 server.get("/api", (req, res) => {
   res.send("Server works.");
