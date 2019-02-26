@@ -4,6 +4,8 @@ const helmet = require("helmet");
 const bcrypt = require("bcryptjs");
 const cors = require("cors");
 const morgan = require("morgan");
+const session = require("express-session");
+const KnexSessionStore = require("connect-session-knex")(session);
 
 const db = require("./data/db");
 const Users = require("./data/models/userModel");
@@ -12,10 +14,31 @@ const userRoutes = require("./routes/userRoutes");
 const registerRoutes = require("./routes/registerRoutes");
 const loginRoutes = require("./routes/loginRoutes");
 
+const sessionConfig = {
+  name: "monkey",
+  secret: "Tell no one.",
+  cookie: {
+    maxAge: 1000 * 60 * 60,
+    secure: false
+  },
+  httpOnly: true,
+  resave: false,
+  saveUninitialized: false,
+
+  store: new KnexSessionStore({
+    knex: db,
+    tablename: "sessions",
+    sidfieldname: "sid",
+    createtable: true,
+    clearInterval: 1000 * 60 * 60
+  })
+};
+
 server.use(express.json());
 server.use(helmet());
 server.use(cors());
 server.use(morgan("dev"));
+server.use(session(sessionConfig));
 
 server.use("/api/users", userRoutes);
 server.use("/api/register", registerRoutes);

@@ -6,26 +6,10 @@ const db = require("../data/db");
 const Users = require("../data/models/userModel");
 
 function restricted(req, res, next) {
-  const { username, password } = req.headers;
-  if (username && password) {
-    Users.findBy({ username })
-      .first()
-      .then(user => {
-        if (user && bcrypt.compareSync(password, user.password)) {
-          next();
-        } else {
-          res.status(401).json({ message: "Invalid Credentials" });
-        }
-      })
-      .catch(error => {
-        res.status(500).json({
-          message: "Unexpected error."
-        });
-      });
+  if (req.session && req.session.user) {
+    next();
   } else {
-    res.status(500).json({
-      message: "Please provide credentials."
-    });
+    res.status(401).json({ message: "Please provide proper creds." });
   }
 }
 

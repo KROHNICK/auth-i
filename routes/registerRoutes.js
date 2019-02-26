@@ -11,6 +11,7 @@ router.post("/", (req, res) => {
   user.password = hash;
   Users.add(user)
     .then(saved => {
+      req.session.user = saved;
       res.status(201).json(saved);
     })
     .catch(error => {
