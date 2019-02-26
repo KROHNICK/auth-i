@@ -13,12 +13,13 @@ const Users = require("./data/models/userModel");
 const userRoutes = require("./routes/userRoutes");
 const registerRoutes = require("./routes/registerRoutes");
 const loginRoutes = require("./routes/loginRoutes");
+const logoutRoutes = require("./routes/logoutRoutes");
 
 const sessionConfig = {
   name: "monkey",
   secret: "Tell no one.",
   cookie: {
-    maxAge: 1000 * 60 * 60,
+    maxAge: 1000 * 60 * 60 * 24,
     secure: false
   },
   httpOnly: true,
@@ -30,7 +31,7 @@ const sessionConfig = {
     tablename: "sessions",
     sidfieldname: "sid",
     createtable: true,
-    clearInterval: 1000 * 60 * 60
+    clearInterval: 1000 * 60 * 60 * 24
   })
 };
 
@@ -43,6 +44,7 @@ server.use(session(sessionConfig));
 server.use("/api/users", userRoutes);
 server.use("/api/register", registerRoutes);
 server.use("/api/login", loginRoutes);
+server.use("/api/logout", logoutRoutes);
 
 server.get("/api", (req, res) => {
   res.send("Server works.");

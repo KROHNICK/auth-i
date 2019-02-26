@@ -1,8 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
-const session = require("express-session");
-const KnexSessionStore = require("connect-session-knex")(session);
 
 const db = require("../data/db");
 const Users = require("../data/models/userModel");
@@ -24,7 +22,11 @@ router.post("/", restricted, (req, res) => {
         req.session.user = user;
         res
           .status(200)
-          .json({ message: `Welcome ${user.username}! Here's a cookie.` });
+          .json({
+            message: `Welcome ${
+              user.username
+            }! Successfully logged in, here's a cookie.`
+          });
       } else {
         res.status(401).json({ message: "Invalid Credentials" });
       }
